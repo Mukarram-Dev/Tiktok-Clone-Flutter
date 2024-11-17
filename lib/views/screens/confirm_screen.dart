@@ -9,10 +9,10 @@ class ConfirmScreen extends StatefulWidget {
   final File videoFile;
   final String videoPath;
   const ConfirmScreen({
-    Key? key,
+    super.key,
     required this.videoFile,
     required this.videoPath,
-  }) : super(key: key);
+  });
 
   @override
   State<ConfirmScreen> createState() => _ConfirmScreenState();
