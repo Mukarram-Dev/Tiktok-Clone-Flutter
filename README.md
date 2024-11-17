@@ -35,8 +35,4 @@ Then run the following commands to run your app:
 **Client**: Flutter, GetX
 
 **Architecture**: MVC
-    
-## Feedback
-
-If you have any feedback, please reach out to me at namanrivaan@gmail.com
 
