@@ -115,6 +115,7 @@ class VideoScreen extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  const SizedBox(height: 10),
                                   Text(
                                     data.caption,
                                     style: const TextStyle(
@@ -122,6 +123,7 @@ class VideoScreen extends StatelessWidget {
                                       color: Colors.white,
                                     ),
                                   ),
+                                  const SizedBox(height: 5),
                                   Row(
                                     children: [
                                       const Icon(
@@ -138,14 +140,15 @@ class VideoScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ],
-                                  )
+                                  ),
+                                  const SizedBox(height: 10),
                                 ],
                               ),
                             ),
                           ),
                           Container(
-                            width: 100,
-                            margin: EdgeInsets.only(top: size.height / 5),
+                            width: 80,
+                            margin: EdgeInsets.only(top: size.height / 3),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -170,7 +173,7 @@ class VideoScreen extends StatelessWidget {
                                     Text(
                                       data.likes.length.toString(),
                                       style: const TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         color: Colors.white,
                                       ),
                                     )
@@ -196,7 +199,7 @@ class VideoScreen extends StatelessWidget {
                                     Text(
                                       data.commentCount.toString(),
                                       style: const TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         color: Colors.white,
                                       ),
                                     )
@@ -216,7 +219,7 @@ class VideoScreen extends StatelessWidget {
                                     Text(
                                       data.shareCount.toString(),
                                       style: const TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         color: Colors.white,
                                       ),
                                     )

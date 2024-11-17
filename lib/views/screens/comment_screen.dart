@@ -4,32 +4,21 @@ import 'package:tiktok_tutorial/constants.dart';
 import 'package:tiktok_tutorial/controllers/comment_controller.dart';
 import 'package:timeago/timeago.dart' as tago;
 
-class CommentScreen extends StatefulWidget {
+class CommentScreen extends StatelessWidget {
   final String id;
-  const CommentScreen({
+  CommentScreen({
     super.key,
     required this.id,
   });
 
-  @override
-  State<CommentScreen> createState() => _CommentScreenState();
-}
-
-class _CommentScreenState extends State<CommentScreen> {
   final TextEditingController _commentController = TextEditingController();
 
-  CommentController commentController = Get.put(CommentController());
-
-  @override
-  void dispose() {
-    _commentController.dispose();
-    super.dispose();
-  }
+  final commentController = Get.put(CommentController());
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    commentController.updatePostId(widget.id);
+    commentController.updatePostId(id);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -49,7 +38,9 @@ class _CommentScreenState extends State<CommentScreen> {
                             backgroundColor: Colors.black,
                             backgroundImage: NetworkImage(comment.profilePhoto),
                           ),
-                          title: Row(
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 "${comment.username}  ",
@@ -59,12 +50,14 @@ class _CommentScreenState extends State<CommentScreen> {
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              Text(
-                                comment.comment,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
+                              Flexible(
+                                child: Text(
+                                  comment.comment,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ],
@@ -135,16 +128,13 @@ class _CommentScreenState extends State<CommentScreen> {
                     ),
                   ),
                 ),
-                trailing: TextButton(
-                  onPressed: () =>
-                      commentController.postComment(_commentController.text),
-                  child: const Text(
-                    'Send',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
+                trailing: IconButton.outlined(
+                  onPressed: () async {
+                    await commentController
+                        .postComment(_commentController.text);
+                    _commentController.text = '';
+                  },
+                  icon: const Icon(Icons.send),
                 ),
               ),
             ],
