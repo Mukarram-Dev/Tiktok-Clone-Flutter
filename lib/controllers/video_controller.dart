@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_tutorial/constants.dart';
 import 'package:tiktok_tutorial/models/video.dart';
@@ -15,9 +16,11 @@ class VideoController extends GetxController {
         firestore.collection('videos').snapshots().map((QuerySnapshot query) {
       List<Video> retVal = [];
       for (var element in query.docs) {
-        retVal.add(
-          Video.fromSnap(element),
-        );
+        try {
+          retVal.add(Video.fromSnap(element));
+        } catch (e) {
+          debugPrint('Error parsing video: $e');
+        }
       }
       return retVal;
     }));

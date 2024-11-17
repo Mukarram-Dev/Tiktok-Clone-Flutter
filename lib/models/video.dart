@@ -42,20 +42,23 @@ class Video {
       };
 
   static Video fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
+    var snapshot = snap.data() as Map<String, dynamic>?;
+    if (snapshot == null) {
+      throw Exception("Video data is null or invalid");
+    }
 
     return Video(
-      username: snapshot['username'],
-      uid: snapshot['uid'],
-      id: snapshot['id'],
-      likes: snapshot['likes'],
-      commentCount: snapshot['commentCount'],
-      shareCount: snapshot['shareCount'],
-      songName: snapshot['songName'],
-      caption: snapshot['caption'],
-      videoUrl: snapshot['videoUrl'],
-      profilePhoto: snapshot['profilePhoto'],
-      thumbnail: snapshot['thumbnail'],
+      username: snapshot['username'] ?? '',
+      uid: snapshot['uid'] ?? '',
+      id: snapshot['id'] ?? '',
+      likes: snapshot['likes'] ?? [],
+      commentCount: snapshot['commentCount'] ?? 0,
+      shareCount: snapshot['shareCount'] ?? 0,
+      songName: snapshot['songName'] ?? '',
+      caption: snapshot['caption'] ?? '',
+      videoUrl: snapshot['videoUrl'] ?? '',
+      profilePhoto: snapshot['profilePhoto'] ?? '',
+      thumbnail: snapshot['thumbnail'] ?? '',
     );
   }
 }

@@ -19,7 +19,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   void initState() {
     super.initState();
     videoPlayerController = VideoPlayerController.networkUrl(
-      Uri(path: widget.videoUrl),
+      Uri.tryParse(widget.videoUrl) ?? Uri(),
     )..initialize().then((value) {
         videoPlayerController.play();
         videoPlayerController.setVolume(1);
