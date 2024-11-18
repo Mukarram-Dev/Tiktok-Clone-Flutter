@@ -7,25 +7,48 @@ import 'package:video_compress/video_compress.dart';
 
 class UploadVideoController extends GetxController {
   _compressVideo(String videoPath) async {
-    final compressedVideo = await VideoCompress.compressVideo(
-      videoPath,
-      quality: VideoQuality.MediumQuality,
-    );
-    return compressedVideo!.file;
+    try {
+      print('Compressing video...');
+      final compressedVideo = await VideoCompress.compressVideo(
+        videoPath,
+        quality: VideoQuality.MediumQuality,
+      );
+      print('Compression complete');
+      return compressedVideo?.file;
+    } catch (e) {
+      print('Error during video compression: $e');
+      rethrow;
+    }
   }
 
   Future<String> _uploadVideoToStorage(String id, String videoPath) async {
-    Reference ref = firebaseStorage.ref().child('videos').child(id);
-
-    UploadTask uploadTask = ref.putFile(await _compressVideo(videoPath));
-    TaskSnapshot snap = await uploadTask;
-    String downloadUrl = await snap.ref.getDownloadURL();
-    return downloadUrl;
+    try {
+      print('Uploading video...');
+      final compressedFile = await _compressVideo(videoPath);
+      if (compressedFile == null) throw 'Compressed video is null';
+      Reference ref = firebaseStorage.ref().child('videos').child(id);
+      UploadTask uploadTask = ref.putFile(compressedFile);
+      TaskSnapshot snap = await uploadTask;
+      print('Upload complete');
+      String downloadUrl = await snap.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      Get.back();
+      print('Error during video upload: $e');
+      rethrow;
+    }
   }
 
   _getThumbnail(String videoPath) async {
-    final thumbnail = await VideoCompress.getFileThumbnail(videoPath);
-    return thumbnail;
+    try {
+      print('Generating thumbnail...');
+      final thumbnail = await VideoCompress.getFileThumbnail(videoPath);
+      print('Thumbnail generated');
+      return thumbnail;
+    } catch (e) {
+      print('Error generating thumbnail: $e');
+      rethrow;
+    }
   }
 
   Future<String> _uploadImageToStorage(String id, String videoPath) async {
@@ -37,7 +60,8 @@ class UploadVideoController extends GetxController {
   }
 
   // upload video
-  uploadVideo(String songName, String caption, String videoPath) async {
+  Future<void> uploadVideo(
+      String songName, String caption, String videoPath) async {
     try {
       String uid = firebaseAuth.currentUser!.uid;
       DocumentSnapshot userDoc =
@@ -62,15 +86,26 @@ class UploadVideoController extends GetxController {
         thumbnail: thumbnail,
       );
 
-      await firestore.collection('videos').doc('Video $len').set(
+      await firestore
+          .collection('videos')
+          .doc('Video $len')
+          .set(
             video.toJson(),
-          );
+          )
+          .then((_) {
+        print('Document added successfully');
+        Get.back();
+      }).catchError((e) {
+        print('Error adding document: $e');
+      });
+
       Get.back();
     } catch (e) {
       Get.snackbar(
         'Error Uploading Video',
         e.toString(),
       );
+      Get.back();
     }
   }
 }

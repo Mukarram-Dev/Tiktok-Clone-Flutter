@@ -18,13 +18,9 @@ class SignupScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Tiktok Clone',
-              style: TextStyle(
-                fontSize: 35,
-                color: buttonColor,
-                fontWeight: FontWeight.w900,
-              ),
+            Icon(
+              Icons.tiktok,
+              size: 40,
             ),
             const Text(
               'Register',

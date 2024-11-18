@@ -13,17 +13,22 @@ class VideoController extends GetxController {
   void onInit() {
     super.onInit();
     _videoList.bindStream(
-        firestore.collection('videos').snapshots().map((QuerySnapshot query) {
-      List<Video> retVal = [];
-      for (var element in query.docs) {
-        try {
-          retVal.add(Video.fromSnap(element));
-        } catch (e) {
-          debugPrint('Error parsing video: $e');
+      firestore
+          .collection('videos')
+          .orderBy(FieldPath.documentId, descending: true)
+          .snapshots()
+          .map((QuerySnapshot query) {
+        List<Video> retVal = [];
+        for (var element in query.docs) {
+          try {
+            retVal.add(Video.fromSnap(element));
+          } catch (e) {
+            debugPrint('Error parsing video: $e');
+          }
         }
-      }
-      return retVal;
-    }));
+        return retVal;
+      }),
+    );
   }
 
   likeVideo(String id) async {

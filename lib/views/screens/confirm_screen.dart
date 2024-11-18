@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tiktok_tutorial/components/custom_dialog_widget.dart';
 import 'package:tiktok_tutorial/controllers/upload_video_controller.dart';
 import 'package:tiktok_tutorial/views/widgets/text_input_field.dart';
 import 'package:video_player/video_player.dart';
@@ -91,10 +92,14 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                     height: 10,
                   ),
                   ElevatedButton(
-                      onPressed: () => uploadVideoController.uploadVideo(
-                          _songController.text,
-                          _captionController.text,
-                          widget.videoPath),
+                      onPressed: () async {
+                        CustomDialogWidget.dialogLoading(
+                            msg: 'Uploading Video', context: context);
+                        await uploadVideoController.uploadVideo(
+                            _songController.text,
+                            _captionController.text,
+                            widget.videoPath);
+                      },
                       child: const Text(
                         'Share!',
                         style: TextStyle(
